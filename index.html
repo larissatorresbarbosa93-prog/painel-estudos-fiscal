@@ -106,7 +106,7 @@
             font-size: 0.9em;
         }
 
-        /* Home / Cronômetro (Visão 1 Inalterada) */
+        /* Home / Cronômetro */
         .home-container {
             display: flex;
             flex-direction: column;
@@ -203,7 +203,7 @@
             cursor: pointer;
         }
 
-        /* Planejamento / Edital Verticalizado por Submatérias */
+        /* Edital Verticalizado */
         .planning-top {
             display: grid;
             grid-template-columns: 140px 1fr;
@@ -343,6 +343,25 @@
             font-size: 1.1em;
         }
 
+        /* Histórico Diário */
+        .historico-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .historico-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #21262d;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            border-left: 4px solid var(--accent-blue);
+        }
+
         /* Barra Lateral Direita */
         .right-sidebar {
             width: 340px;
@@ -397,6 +416,25 @@
             margin-bottom: 8px;
             font-size: 0.85em;
         }
+        .backup-container {
+            margin-top: 20px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            display: flex;
+            gap: 8px;
+        }
+        .btn-bkp {
+            flex: 1;
+            background: #21262d;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px;
+            font-size: 0.75em;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-bkp:hover { background: #30363d; color: #fff; }
     </style>
 </head>
 <body>
@@ -409,6 +447,7 @@
         <ul class="nav-links">
             <li id="menu-home" class="active"><a onclick="mudarView('home')">🏠 Home / Cronômetro</a></li>
             <li id="menu-ciclo"><a onclick="mudarView('ciclo')">🔄 Edital & Submatérias</a></li>
+            <li id="menu-historico"><a onclick="mudarView('historico')">📅 Histórico Diário</a></li>
             <li><a href="https://notebooklm.google.com" target="_blank">🧠 NotebookLM (PDFs) ↗</a></li>
         </ul>
         <div style="font-size: 0.75em; color: var(--text-muted); text-align: center; border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: auto;">
@@ -419,7 +458,7 @@
     <!-- CONTEÚDO CENTRAL -->
     <main>
         
-        <!-- VISÃO 1: HOME / CRONÔMETRO (Exatamente como você validou) -->
+        <!-- VISÃO 1: HOME / CRONÔMETRO -->
         <div id="view-home" class="view-section active">
             <header>
                 <h1>Painel de Estudos - Alto Rendimento</h1>
@@ -433,7 +472,7 @@
                     <div style="max-width: 480px; margin: 0 auto 15px auto; text-align: left;">
                         <label for="materia-ativa">Matéria em estudo (Ciclo Base):</label>
                         <select id="materia-ativa">
-                            <option value="portugues" selected>1. Português (Passo Estratégico)</option>
+                            <option value="portugues" selected>1. Português</option>
                             <option value="tributario">2. Direito Tributário</option>
                             <option value="administrativo">3. Direito Administrativo</option>
                             <option value="contabilidade">4. Contabilidade Geral</option>
@@ -461,7 +500,7 @@
             </div>
         </div>
 
-        <!-- VISÃO 2: EDITAL VERTICALIZADO POR SUBMATÉRIAS (Temas dos PDFs) -->
+        <!-- VISÃO 2: EDITAL VERTICALIZADO POR SUBMATÉRIAS -->
         <div id="view-ciclo" class="view-section">
             <header style="text-align: left; margin-bottom: 15px;">
                 <h1>Edital Verticalizado por Submatérias</h1>
@@ -482,7 +521,6 @@
                 </div>
             </div>
 
-            <!-- Seletor de Matéria para o Edital -->
             <div class="materia-seletor-container">
                 <label for="filtro-materia-edital" style="margin: 0; white-space: nowrap; font-weight: bold;">Filtrar Matéria:</label>
                 <select id="filtro-materia-edital" onchange="mudarMatériaEdital()" style="margin: 0;">
@@ -501,7 +539,6 @@
                     <span id="estatisticas-materia-ativa" style="font-size: 0.75em; color: var(--text-muted);">0% Acertos</span>
                 </h3>
 
-                <!-- Campo Digitável para Adicionar Nova Submatéria / Tema de PDF -->
                 <div class="form-adicionar">
                     <input type="text" id="input-nova-sub" placeholder="Digite o nome do tema, PDF ou submatéria (ex: Balanço Patrimonial, CPC 00)...">
                     <button class="btn-add" onclick="adicionarSubmateria()">+ Adicionar Tema</button>
@@ -518,16 +555,29 @@
                             <th style="text-align:center; width: 50px;">Ação</th>
                         </tr>
                     </thead>
-                    <tbody id="tabela-sub-corpo">
-                        <!-- Preenchido dinamicamente via JS -->
-                    </tbody>
+                    <tbody id="tabela-sub-corpo"></tbody>
                 </table>
+            </div>
+        </div>
+
+        <!-- VISÃO 3: HISTÓRICO DIÁRIO -->
+        <div id="view-historico" class="view-section">
+            <header style="text-align: left; margin-bottom: 15px;">
+                <h1>Histórico de Blocos Concluídos</h1>
+                <p>Auditoria diária de consistência e tempo de foco registrado</p>
+            </header>
+
+            <div class="historico-box">
+                <h3 style="margin-top:0; color: var(--accent-blue); font-size: 1.1em; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Registro Cronológico</h3>
+                <div id="lista-historico-blocos">
+                    <p style="color: var(--text-muted); text-align: center; padding: 20px;">Nenhum bloco de estudo registrado ainda. Use o cronômetro para iniciar!</p>
+                </div>
             </div>
         </div>
 
     </main>
 
-    <!-- BARRA LATERAL DIREITA (TEMPO E EVOLUÇÃO) -->
+    <!-- BARRA LATERAL DIREITA -->
     <div class="right-sidebar">
         <div class="right-sidebar-header">
             <h3>Evolução de Tempo</h3>
@@ -543,7 +593,12 @@
             <li class="item-lista"><span>Raciocínio Lógico</span><strong style="color: var(--accent-blue);" id="tempo-rlm">0 min</strong></li>
         </ul>
         
-        <div style="margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+        <div class="backup-container">
+            <button class="btn-bkp" onclick="exportarBackup()">📥 Exportar Dados</button>
+            <button class="btn-bkp" onclick="importarBackupPrompt()">📤 Importar Dados</button>
+        </div>
+
+        <div style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
             <p style="font-size: 0.75em; color: var(--accent-purple); font-weight: bold; margin-bottom: 5px;">⚡ Plano Secundário (PM3):</p>
             <p style="font-size: 0.75em; color: var(--text-muted);">Pílulas de IA e Product Management em micro-momentos (pausas).</p>
         </div>
@@ -564,21 +619,15 @@
             'rlm': 'Raciocínio Lógico / Exatas'
         };
 
-        // Banco inicial de submatérias padrão (pode adicionar/remover livremente)
-        let dadosEdital = JSON.parse(localStorage.getItem('dadosEdital_v2')) || {
+        let dadosEdital = JSON.parse(localStorage.getItem('dadosEdital_v3')) || {
             'contabilidade': [
                 { id: 1, nome: "1. Conceitos, Objetivos e Finalidades da Contabilidade", acertos: 18, erros: 5 },
-                { id: 2, nome: "2. Patrimônio: Componentes e Equação Fundamental", acertos: 18, erros: 3 },
-                { id: 3, nome: "3. Atos e Fatos Administrativos", acertos: 0, erros: 0 }
+                { id: 2, nome: "2. Patrimônio: Componentes e Equação Fundamental", acertos: 18, erros: 3 }
             ],
-            'portugues': [
-                { id: 101, nome: "1. Compreensão e Interpretação de Textos", acertos: 10, erros: 2 }
-            ],
-            'tributario': [],
-            'administrativo': [],
-            'constitucional': [],
-            'rlm': []
+            'portugues': [], 'tributario': [], 'administrativo': [], 'constitucional': [], 'rlm': []
         };
+
+        let historicoBlocos = JSON.parse(localStorage.getItem('historicoBlocos_v3')) || [];
 
         function mudarView(viewName) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
@@ -592,10 +641,13 @@
                 document.getElementById('menu-ciclo').classList.add('active');
                 carregarTabelaSubmaterias();
                 atualizarMetricasCiclo();
+            } else if (viewName === 'historico') {
+                document.getElementById('view-historico').classList.add('active');
+                document.getElementById('menu-historico').classList.add('active');
+                carregarHistoricoTela();
             }
         }
 
-        // --- Lógica do Cronômetro (Mantida intacta) ---
         function atualizarDisplay(segundos) {
             const min = Math.floor(segundos / 60);
             const seg = segundos % 60;
@@ -653,6 +705,15 @@
                 let novoTempoTotal = tempoAtualGuardado + minutosEstudados;
                 localStorage.setItem('tempo_' + materiaSelecionada, novoTempoTotal);
                 
+                // Salvar no Histórico
+                const dataHoje = new Date().toLocaleDateString('pt-BR');
+                historicoBlocos.unshift({
+                    data: dataHoje,
+                    materia: nomesMateriasMap[materiaSelecionada],
+                    tempo: minutosEstudados
+                });
+                localStorage.setItem('historicoBlocos_v3', JSON.stringify(historicoBlocos));
+
                 carregarTemposMatérias();
                 alert(`Sessão finalizada! Registrados ${minutosEstudados} minutos em ${nomesMateriasMap[materiaSelecionada]}.`);
             }
@@ -664,10 +725,7 @@
             atualizarSugestaoPausaPorSegundos(segundosRestantes);
         }
 
-        // --- Lógica do Edital Verticalizado & Submatérias ---
-        function mudarMatériaEdital() {
-            carregarTabelaSubmaterias();
-        }
+        function mudarMatériaEdital() { carregarTabelaSubmaterias(); }
 
         function carregarTabelaSubmaterias() {
             const materiaKey = document.getElementById('filtro-materia-edital').value;
@@ -675,14 +733,12 @@
             
             const tbody = document.getElementById('tabela-sub-corpo');
             tbody.innerHTML = '';
-
             let subs = dadosEdital[materiaKey] || [];
             
-            let totalAcertosMateria = 0;
-            let totalErrosMateria = 0;
+            let totalAcertosMateria = 0, totalErrosMateria = 0;
 
             if (subs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">Nenhum tema cadastrado ainda. Use o campo acima para adicionar submatérias/PDFs.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">Nenhum tema cadastrado ainda. Use o campo acima para adicionar.</td></tr>`;
                 document.getElementById('estatisticas-materia-ativa').textContent = `0% Acertos`;
                 return;
             }
@@ -690,7 +746,6 @@
             subs.forEach(item => {
                 let totalQ = item.acertos + item.erros;
                 let pct = totalQ > 0 ? Math.round((item.acertos / totalQ) * 100) : 0;
-                
                 totalAcertosMateria += item.acertos;
                 totalErrosMateria += item.erros;
 
@@ -706,32 +761,24 @@
                     <td style="text-align:center;"><input type="number" class="input-num" value="${item.erros}" min="0" onchange="atualizarAcertosErro(${item.id}, 'erros', this.value)"></td>
                     <td style="text-align:center; font-weight:bold;">${totalQ}</td>
                     <td style="text-align:center;"><span class="badge-pct ${classeBadge}">${totalQ > 0 ? pct + '%' : '-'}</span></td>
-                    <td style="text-align:center;"><button class="btn-del" onclick="deletarSubmateria(${item.id})" title="Excluir tema">×</button></td>
+                    <td style="text-align:center;"><button class="btn-del" onclick="deletarSubmateria(${item.id})">×</button></td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            let totalGeralMateria = totalAcertosMateria + totalErrosMateria;
-            let pctGeralMateria = totalGeralMateria > 0 ? Math.round((totalAcertosMateria / totalGeralMateria) * 100) : 0;
-            document.getElementById('estatisticas-materia-ativa').textContent = `${pctGeralMateria}% de Acerto (${totalAcertosMateria}/${totalGeralMateria} questões)`;
+            let totalGeralM = totalAcertosMateria + totalErrosMateria;
+            let pctGeralM = totalGeralM > 0 ? Math.round((totalAcertosMateria / totalGeralM) * 100) : 0;
+            document.getElementById('estatisticas-materia-ativa').textContent = `${pctGeralM}M% de Acerto (${totalAcertosMateria}/${totalGeralM} questões)`.replace('M', '');
         }
 
         function adicionarSubmateria() {
             const materiaKey = document.getElementById('filtro-materia-edital').value;
             const input = document.getElementById('input-nova-sub');
             const nomeTema = input.value.trim();
+            if (!nomeTema) return alert("Digite o nome da submatéria.");
 
-            if (!nomeTema) {
-                alert("Digite o nome da submatéria ou tema do PDF.");
-                return;
-            }
-
-            if (!dadosEdital[materiaKey]) {
-                dadosEdital[materiaKey] = [];
-            }
-
-            const novoId = Date.now();
-            dadosEdital[materiaKey].push({ id: novoId, nome: nomeTema, acertos: 0, erros: 0 });
+            if (!dadosEdital[materiaKey]) dadosEdital[materiaKey] = [];
+            dadosEdital[materiaKey].push({ id: Date.now(), nome: nomeTema, acertos: 0, erros: 0 });
             
             salvarEditalNoStorage();
             input.value = '';
@@ -740,8 +787,7 @@
 
         function atualizarAcertosErro(id, tipo, valor) {
             const materiaKey = document.getElementById('filtro-materia-edital').value;
-            let subs = dadosEdital[materiaKey];
-            let item = subs.find(s => s.id === id);
+            let item = dadosEdital[materiaKey].find(s => s.id === id);
             if (item) {
                 item[tipo] = parseInt(valor) || 0;
                 salvarEditalNoStorage();
@@ -757,25 +803,37 @@
         }
 
         function salvarEditalNoStorage() {
-            localStorage.setItem('dadosEdital_v2', JSON.stringify(dadosEdital));
+            localStorage.setItem('dadosEdital_v3', JSON.stringify(dadosEdital));
         }
 
-        // --- Gerenciamento de Tempos e Métricas ---
+        function carregarHistoricoTela() {
+            const container = document.getElementById('lista-historico-blocos');
+            container.innerHTML = '';
+            if (historicoBlocos.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 20px;">Nenhum bloco de estudo registrado ainda.</p>`;
+                return;
+            }
+            historicoBlocos.forEach(bloco => {
+                let div = document.createElement('div');
+                div.className = 'historico-item';
+                div.innerHTML = `<span>📚 <strong>${bloco.materia}</strong></span> <span style="color: var(--text-muted);">${bloco.data}</span> <strong style="color: var(--accent-green);">${bloco.tempo} min</strong>`;
+                container.appendChild(div);
+            });
+        }
+
         function limparTodosOsTempos() {
-            if (confirm("Deseja realmente apagar todo o tempo acumulado do ciclo?")) {
-                listaMaterias.forEach(materia => {
-                    localStorage.removeItem('tempo_' + materia);
-                });
+            if (confirm("Deseja apagar todo o tempo acumulado?")) {
+                listaMaterias.forEach(m => localStorage.removeItem('tempo_' + m));
+                historicoBlocos = [];
+                localStorage.removeItem('historicoBlocos_v3');
                 carregarTemposMatérias();
                 atualizarMetricasCiclo();
-                alert("Painel resetado com sucesso!");
             }
         }
 
         function carregarTemposMatérias() {
             listaMaterias.forEach(materia => {
                 let tempoMin = parseInt(localStorage.getItem('tempo_' + materia) || 0);
-                
                 const elEv = document.getElementById('tempo-' + materia);
                 if (elEv) elEv.textContent = tempoMin + ' min';
             });
@@ -787,19 +845,46 @@
             listaMaterias.forEach(materia => {
                 totalMinutos += parseInt(localStorage.getItem('tempo_' + materia) || 0);
             });
-
-            let metaMinutosTotal = 1800; // Meta de ciclo de 30 horas líquidas
-
+            let metaMinutosTotal = 1800;
             let horas = Math.floor(totalMinutos / 60);
             let mins = totalMinutos % 60;
-
             document.getElementById('texto-progresso-total').textContent = `${horas}h ${mins.toString().padStart(2, '0')}min / 30h 00min`;
-
             let porcentagem = Math.min(100, (totalMinutos / metaMinutosTotal) * 100);
             document.getElementById('barra-progresso-fill').style.width = porcentagem + '%';
+            document.getElementById('ciclos-completos').textContent = Math.floor(totalMinutos / metaMinutosTotal);
+        }
 
-            let ciclos = Math.floor(totalMinutos / metaMinutosTotal);
-            document.getElementById('ciclos-completos').textContent = ciclos;
+        function exportarBackup() {
+            const dadosBackup = {
+                edital: dadosEdital,
+                historico: historicoBlocos,
+                tempos: listaMaterias.reduce((acc, m) => ({ ...acc, [m]: localStorage.getItem('tempo_' + m) }), {})
+            };
+            const blob = new Blob([JSON.stringify(dadosBackup, null, 2)], { type: 'json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'backup_painel_fiscal.json';
+            a.click();
+        }
+
+        function importarBackupPrompt() {
+            const jsonStr = prompt("Cole aqui o conteúdo do seu arquivo JSON de backup:");
+            if (!jsonStr) return;
+            try {
+                const dados = JSON.parse(jsonStr);
+                if (dados.edital) { dadosEdital = dados.edital; localStorage.setItem('dadosEdital_v3', JSON.stringify(dadosEdital)); }
+                if (dados.historico) { historicoBlocos = dados.historico; localStorage.setItem('historicoBlocos_v3', JSON.stringify(historicoBlocos)); }
+                if (dados.tempos) {
+                    Object.keys(dados.tempos).forEach(m => {
+                        if (dados.tempos[m]) localStorage.setItem('tempo_' + m, dados.tempos[m]);
+                    });
+                }
+                carregarTemposMatérias();
+                alert("Backup importado com sucesso!");
+            } catch (e) {
+                alert("Erro ao importar JSON. Verifique o formato.");
+            }
         }
 
         window.onload = function() {
